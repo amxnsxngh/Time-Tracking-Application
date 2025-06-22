@@ -1,12 +1,18 @@
 import React from 'react'
+import Header from './components/Header'
+import TaskForm from './components/TaskForm'
+import Summary from './components/Summary'
+import TaskList from './components/TaskList'
 
 const App = () => {
     return (
-        <div className="text-center">
-            <h1 className="text-3xl font-bold underline center">
-                Time Tracking Application
-            </h1>
-        </div>
+        <>
+            <Header/>
+            <TaskForm/>
+            <Summary/>
+            <TaskList/>
+        </>
+        
     )
 }
 export default App

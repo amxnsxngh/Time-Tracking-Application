@@ -89,7 +89,7 @@ const App = () => {
     <>
       <Header />
       <TaskForm onAdd={handleAddTask} />
-      <Summary/>
+      <Summary tasks={tasks}/>
       <TaskList
         tasks={tasks}
         onEditSave={handleEditTask}

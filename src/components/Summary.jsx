@@ -18,7 +18,7 @@ const Summary = ({ tasks = [] }) => {
 
   // Convert total seconds into minutes and hours
   const totalMinutes = Math.round(totalSeconds / 60)
-  const totalHours = Math.round(totalMinutes / 60)
+  const totalHours = Math.floor(totalMinutes / 60)
   const remainingMinutes = totalMinutes % 60
 
   return (

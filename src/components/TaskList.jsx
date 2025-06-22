@@ -4,7 +4,7 @@ import { FaPlay, FaStop, FaTrash, FaEdit } from "react-icons/fa"
 // This function formats seconds into "Xh Ym" string
 const formatTime = (seconds) => {
   const mins = Math.round(seconds / 60) 
-  const hrs = Math.round(mins / 60)    
+  const hrs = Math.floor(mins / 60)    
   const remainingMins = mins % 60        
   return `${hrs}h ${remainingMins}m`
 }

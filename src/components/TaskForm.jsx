@@ -1,38 +1,43 @@
 import React, { useState } from "react"
 
 const TaskForm = ({ onAdd }) => {
+  // State for task name and time fields
   const [taskName, setTaskName] = useState("")
   const [isOldTask, setIsOldTask] = useState(false)
   const [hours, setHours] = useState("")
   const [minutes, setMinutes] = useState("")
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    // Make sure task name isn't empty
     if (!taskName.trim()) {
       alert("Please enter a task name")
       return
     }
 
-    
+    // Validate minutes if this is an old task
     const mins = parseInt(minutes, 10)
     if (isOldTask && (isNaN(mins) || mins < 0 || mins > 59)) {
       alert("Minutes must be between 0 and 59")
       return
     }
 
-    
+    // Validate hours if this is an old task
     const hrs = parseInt(hours, 10)
     if (isOldTask && (isNaN(hrs) || hrs < 0)) {
       alert("Hours must be 0 or more")
       return
     }
 
-    
+    // Calculate total time only if this is an old task
     let timeTaken
     if (isOldTask) {
       timeTaken = hrs + mins / 60
     }
 
+    // Create a task object
     const task = {
       taskName: taskName.trim(),
       isOld: isOldTask,
@@ -42,14 +47,14 @@ const TaskForm = ({ onAdd }) => {
       minutes: isOldTask ? mins : undefined,
     }
 
-    
+    // Send task to parent if onAdd is a function
     if (typeof onAdd === "function") {
       onAdd(task)
     } else {
       console.log("onAdd prop is not a function; task:", task)
     }
 
-    
+    // Clear the form after submitting
     setTaskName("")
     setIsOldTask(false)
     setHours("")
@@ -61,7 +66,6 @@ const TaskForm = ({ onAdd }) => {
       onSubmit={handleSubmit}
       className="space-y-5 bg-white p-8 rounded-2xl shadow-sm max-w-md mx-auto"
     >
-      
       <div>
         <label
           htmlFor="taskName"
@@ -80,7 +84,6 @@ const TaskForm = ({ onAdd }) => {
         />
       </div>
 
-      {/* Is Old Task Checkbox */}
       <div className="flex items-center gap-3">
         <input
           id="isOldTask"
@@ -97,15 +100,13 @@ const TaskForm = ({ onAdd }) => {
         </label>
       </div>
 
-      
       {isOldTask && (
         <div>
-          <label
-            className="block text-gray-700 text-sm font-semibold mb-1"
-          >
+          <label className="block text-gray-700 text-sm font-semibold mb-1">
             Time Taken
           </label>
           <div className="flex gap-4">
+
             <div className="flex flex-col w-1/2">
               <input
                 id="hours"
@@ -118,6 +119,7 @@ const TaskForm = ({ onAdd }) => {
                 required
               />
             </div>
+
             <div className="flex flex-col w-1/2">
               <input
                 id="minutes"

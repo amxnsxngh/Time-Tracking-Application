@@ -1,25 +1,25 @@
 import React, { useState } from "react"
 import { FaPlay, FaStop, FaTrash, FaEdit } from "react-icons/fa"
 
-// This function formats seconds into "Xh Ym" string
+// Utility function to format seconds into a readable "Xh Ym" string
 const formatTime = (seconds) => {
-  const mins = Math.round(seconds / 60) 
-  const hrs = Math.floor(mins / 60)    
-  const remainingMins = mins % 60        
+  const mins = Math.round(seconds / 60)
+  const hrs = Math.floor(mins / 60)
+  const remainingMins = mins % 60
   return `${hrs}h ${remainingMins}m`
 }
 
 const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
-  // State to track which task is currently being edited
+  // This state holds the ID of the task currently being edited
   const [editingTaskId, setEditingTaskId] = useState(null)
 
-  // Holds the form inputs for editing a task
+  // Local state for the form inputs when editing a task
   const [editedTask, setEditedTask] = useState({})
 
-  // Called when user clicks "Edit" button
+  // Called when user clicks the "Edit" button — sets the editing state
   const startEditing = (task) => {
     setEditingTaskId(task.id)
-    // Initialize form fields with current task data
+    // Pre-fill input fields with current task values
     setEditedTask({
       taskName: task.taskName,
       status: task.status,
@@ -28,18 +28,18 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
     })
   }
 
-  // Cancel editing, reset states
+  // Resets editing state when user clicks "Cancel"
   const cancelEditing = () => {
     setEditingTaskId(null)
     setEditedTask({})
   }
 
-  // Update editedTask state when input changes
+  // Updates local editedTask state when inputs change
   const handleInputChange = (field, value) => {
     setEditedTask({ ...editedTask, [field]: value })
   }
 
-  // Save changes and call parent handler
+  // Triggers parent handler to save edited task, then exits edit mode
   const saveEdit = () => {
     onEditSave(editingTaskId, {
       taskName: editedTask.taskName,
@@ -54,7 +54,7 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow p-6 mt-8 mb-10">
       <h2 className="text-xl font-semibold mb-4 text-center">Tasks List</h2>
 
-      {/* Show message if no tasks */}
+      {/* If no tasks exist, show a fallback message */}
       {tasks.length === 0 ? (
         <p className="text-gray-500 text-center">No tasks added yet.</p>
       ) : (
@@ -70,23 +70,22 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
             </tr>
           </thead>
           <tbody>
+            {/* Loop through tasks and display each one */}
             {tasks.map((task, index) => {
               const isEditing = task.id === editingTaskId
 
               return (
                 <tr key={task.id || index} className="border-b hover:bg-gray-50">
-                  {/* Task Number */}
+                  {/* Task number (index + 1) */}
                   <td className="py-2 px-4">{index + 1}</td>
 
-                  {/* Task Name - input if editing, else text */}
+                  {/* Task Name — editable input or plain text */}
                   <td className="py-2 px-4">
                     {isEditing ? (
                       <input
                         type="text"
                         value={editedTask.taskName}
-                        onChange={(e) =>
-                          handleInputChange("taskName", e.target.value)
-                        }
+                        onChange={(e) => handleInputChange("taskName", e.target.value)}
                         className="border px-2 py-1 rounded w-full"
                       />
                     ) : (
@@ -94,14 +93,12 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
                     )}
                   </td>
 
-                  {/* Status - dropdown if editing, else text */}
+                  {/* Task Status — dropdown if editing */}
                   <td className="py-2 px-4">
                     {isEditing ? (
                       <select
                         value={editedTask.status}
-                        onChange={(e) =>
-                          handleInputChange("status", e.target.value)
-                        }
+                        onChange={(e) => handleInputChange("status", e.target.value)}
                         className="border px-2 py-1 rounded w-full"
                       >
                         <option>Not Started</option>
@@ -113,7 +110,7 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
                     )}
                   </td>
 
-                  {/* Time - inputs for editing, else formatted time */}
+                  {/* Time — editable fields or formatted time */}
                   <td className="py-2 px-4">
                     {isEditing ? (
                       <div className="flex gap-2">
@@ -121,9 +118,7 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
                           type="number"
                           min="0"
                           value={editedTask.hours}
-                          onChange={(e) =>
-                            handleInputChange("hours", e.target.value)
-                          }
+                          onChange={(e) => handleInputChange("hours", e.target.value)}
                           className="w-16 border px-2 py-1 rounded"
                         />
                         <input
@@ -131,9 +126,7 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
                           min="0"
                           max="59"
                           value={editedTask.minutes}
-                          onChange={(e) =>
-                            handleInputChange("minutes", e.target.value)
-                          }
+                          onChange={(e) => handleInputChange("minutes", e.target.value)}
                           className="w-16 border px-2 py-1 rounded"
                         />
                       </div>
@@ -142,19 +135,18 @@ const TaskList = ({ tasks = [], onEditSave, onDelete, onToggleTimer }) => {
                     )}
                   </td>
 
-                  {/* Timer Start/Stop Button */}
+                  {/* Timer Button — toggles between Play and Stop */}
                   <td className="py-2 px-4">
                     <button
                       onClick={() => onToggleTimer(task.id)}
-                      className={`p-2 rounded text-white ${
-                        task.timerRunning ? "bg-red-500" : "bg-green-600"
-                      }`}
+                      className={`p-2 rounded text-white ${task.timerRunning ? "bg-red-500" : "bg-green-600"
+                        }`}
                     >
                       {task.timerRunning ? <FaStop size={14} /> : <FaPlay size={14} />}
                     </button>
                   </td>
 
-                  {/* Actions: Save/Cancel if editing, else Edit/Delete icons */}
+                  {/* Actions — Edit/Delete or Save/Cancel depending on mode */}
                   <td className="py-2 px-4 space-x-2">
                     {isEditing ? (
                       <>
